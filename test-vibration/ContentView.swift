@@ -13,7 +13,7 @@ struct ContentView: View {
     @State private var animationOffset: Double = 0
     @State private var animationTimer: Timer? // 専用のアニメーションタイマー
     
-    let vibrationStyles = ["軽い", "中程度", "強い", "成功", "警告", "エラー"]
+    let vibrationStyles = ["軽い", "中程度", "強い", "硬い", "柔らかい", "成功", "警告", "エラー"]
     
     var body: some View {
         NavigationView {
@@ -67,6 +67,8 @@ struct ContentView: View {
                             Text("軽い").tag(0)
                             Text("中程度").tag(1)
                             Text("強い").tag(2)
+                            Text("硬い").tag(3)
+                            Text("柔らかい").tag(4)
                         }
                         .pickerStyle(SegmentedPickerStyle())
                     }
@@ -194,11 +196,29 @@ struct ContentView: View {
         case 2: // 強い
             let heavyImpact = UIImpactFeedbackGenerator(style: .heavy)
             heavyImpact.impactOccurred()
-        case 3: // 成功
+        case 3: // 硬い (rigid) - iOS 13.0+
+            if #available(iOS 13.0, *) {
+                let rigidImpact = UIImpactFeedbackGenerator(style: .rigid)
+                rigidImpact.impactOccurred()
+            } else {
+                // iOS 13.0未満では重い振動で代替
+                let heavyImpact = UIImpactFeedbackGenerator(style: .heavy)
+                heavyImpact.impactOccurred()
+            }
+        case 4: // 柔らかい (soft) - iOS 13.0+
+            if #available(iOS 13.0, *) {
+                let softImpact = UIImpactFeedbackGenerator(style: .soft)
+                softImpact.impactOccurred()
+            } else {
+                // iOS 13.0未満では軽い振動で代替
+                let lightImpact = UIImpactFeedbackGenerator(style: .light)
+                lightImpact.impactOccurred()
+            }
+        case 5: // 成功
             notificationFeedback.notificationOccurred(.success)
-        case 4: // 警告
+        case 6: // 警告
             notificationFeedback.notificationOccurred(.warning)
-        case 5: // エラー
+        case 7: // エラー
             notificationFeedback.notificationOccurred(.error)
         default:
             let defaultImpact = UIImpactFeedbackGenerator(style: .medium)
@@ -267,6 +287,22 @@ struct ContentView: View {
         case 2: // 強い
             let heavyImpact = UIImpactFeedbackGenerator(style: .heavy)
             heavyImpact.impactOccurred()
+        case 3: // 硬い (rigid) - iOS 13.0+
+            if #available(iOS 13.0, *) {
+                let rigidImpact = UIImpactFeedbackGenerator(style: .rigid)
+                rigidImpact.impactOccurred()
+            } else {
+                let heavyImpact = UIImpactFeedbackGenerator(style: .heavy)
+                heavyImpact.impactOccurred()
+            }
+        case 4: // 柔らかい (soft) - iOS 13.0+
+            if #available(iOS 13.0, *) {
+                let softImpact = UIImpactFeedbackGenerator(style: .soft)
+                softImpact.impactOccurred()
+            } else {
+                let lightImpact = UIImpactFeedbackGenerator(style: .light)
+                lightImpact.impactOccurred()
+            }
         default:
             let defaultImpact = UIImpactFeedbackGenerator(style: .medium)
             defaultImpact.impactOccurred()
@@ -329,6 +365,8 @@ struct ContentView: View {
         case 0: return 0.4  // 軽い
         case 1: return 0.7  // 中程度
         case 2: return 1.0  // 強い
+        case 3: return 0.9  // 硬い (rigidは強めだが重い程ではない)
+        case 4: return 0.5  // 柔らかい (softは軽めだが軽い程ではない)
         default: return 0.7
         }
     }
