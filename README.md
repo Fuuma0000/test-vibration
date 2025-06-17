@@ -9,10 +9,12 @@ Apple Watchの心拍データと連動する振動アプリの開発における
 ## 機能
 
 ### 1. 単発振動テスト
-- 6種類の振動パターンをテスト可能
+- 8種類の振動パターンをテスト可能
   - 軽い振動（Light Impact）
   - 中程度の振動（Medium Impact）
   - 強い振動（Heavy Impact）
+  - 硬い振動 (Hard Impact)
+  - 柔らかい振動 (Soft Impact)
   - 成功通知振動（Success Notification）
   - 警告通知振動（Warning Notification）
   - エラー通知振動（Error Notification）
@@ -28,10 +30,6 @@ Apple Watchの心拍データと連動する振動アプリの開発における
 - より自然な心拍感を演出
 - 強い振動の後に軽い振動を0.15秒遅らせて実行
 
-### 4. 心拍のリアルタイム表示
-- 現在のBPMをリアルタイムで表示
-- スライダーでBPMを調整すると即座に反映
-
 ## 技術仕様
 
 - **開発言語**: Swift
@@ -40,7 +38,7 @@ Apple Watchの心拍データと連動する振動アプリの開発における
 - **必要デバイス**: iPhone（実機テスト必須）
 
 ### 使用API
-- `UIImpactFeedbackGenerator`: 触覚フィードバック（軽い、中程度、強い）
+- `UIImpactFeedbackGenerator`: 触覚フィードバック（軽い、中程度、強い, 硬い, 柔らかい）
 - `UINotificationFeedbackGenerator`: 通知フィードバック（成功、警告、エラー）
 - `Timer`: 定期的な振動実行
 
